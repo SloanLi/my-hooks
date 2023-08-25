@@ -1,9 +1,20 @@
 import "./App.css";
+import { useState } from "react";
 import { Button } from "antd";
-import useModal from "./hooks/useModal";
+import { useModal, useDebounce, useThrottle } from "./hooks";
 function App() {
   const showModal = useModal();
-
+  const [count, setCount] = useState(0);
+  const debounce = useDebounce(() => {
+    console.log("useDebounce");
+  }, 1000);
+  useThrottle(
+    () => {
+      console.log("count", count);
+    },
+    1000,
+    [count]
+  );
   return (
     <>
       <h1>Modal</h1>
@@ -29,7 +40,15 @@ function App() {
             })
           }
         >
-          modal
+          Modal
+        </Button>
+        <Button onClick={debounce}>debounce</Button>
+        <Button
+          onClick={() => {
+            setCount(count + 1);
+          }}
+        >
+          throttle
         </Button>
       </div>
     </>
